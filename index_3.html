@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Programme">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzUzNEFCNyIvPgogIDxyZWN0IHg9IjQiIHk9IjE0IiB3aWR0aD0iMjQiIGhlaWdodD0iNCIgcng9IjIiIGZpbGw9IndoaXRlIi8+CiAgPHJlY3QgeD0iMiIgeT0iMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjEyIiByeD0iMi41IiBmaWxsPSJ3aGl0ZSIvPgogIDxyZWN0IHg9IjI1IiB5PSIxMCIgd2lkdGg9IjUiIGhlaWdodD0iMTIiIHJ4PSIyLjUiIGZpbGw9IndoaXRlIi8+CiAgPHJlY3QgeD0iMCIgeT0iMTIiIHdpZHRoPSI0IiBoZWlnaHQ9IjgiIHJ4PSIyIiBmaWxsPSJ3aGl0ZSIvPgogIDxyZWN0IHg9IjI4IiB5PSIxMiIgd2lkdGg9IjQiIGhlaWdodD0iOCIgcng9IjIiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzUzNEFCNyIvPgogIDxyZWN0IHg9IjQiIHk9IjE0IiB3aWR0aD0iMjQiIGhlaWdodD0iNCIgcng9IjIiIGZpbGw9IndoaXRlIi8+CiAgPHJlY3QgeD0iMiIgeT0iMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjEyIiByeD0iMi41IiBmaWxsPSJ3aGl0ZSIvPgogIDxyZWN0IHg9IjI1IiB5PSIxMCIgd2lkdGg9IjUiIGhlaWdodD0iMTIiIHJ4PSIyLjUiIGZpbGw9IndoaXRlIi8+CiAgPHJlY3QgeD0iMCIgeT0iMTIiIHdpZHRoPSI0IiBoZWlnaHQ9IjgiIHJ4PSIyIiBmaWxsPSJ3aGl0ZSIvPgogIDxyZWN0IHg9IjI4IiB5PSIxMiIgd2lkdGg9IjQiIGhlaWdodD0iOCIgcng9IjIiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==">
+<title>Programme Push / Pull</title>
+<style>
+:root{
+  --push:#534AB7;--push-l:#EEEDFE;--push-d:#3C3489;
+  --pull:#0F6E56;--pull-l:#E1F5EE;--pull-d:#085041;
+  --upper:#185FA5;--upper-l:#E6F1FB;--upper-d:#0C447C;
+  --bg:#fff;--bg2:#f6f6f2;--bg3:#ebebeb;
+  --text:#1a1a1a;--text2:#666;--text3:#aaa;
+  --border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);
+  --r:12px;--rs:8px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1a1a1a;--bg2:#252525;--bg3:#303030;
+  --text:#f0f0f0;--text2:#999;--text3:#555;
+  --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
+  --push-l:#26215C;--pull-l:#04342C;--upper-l:#042C53;
+}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;color:var(--text)}
+
+.hdr{background:var(--bg);border-bottom:.5px solid var(--border);padding:14px 14px 0;position:sticky;top:0;z-index:50}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.app-name{font-size:20px;font-weight:700;letter-spacing:-.5px}
+.streak{font-size:12px;font-weight:600;background:var(--bg2);color:var(--text2);padding:4px 10px;border-radius:999px;border:.5px solid var(--border2)}
+.tabs{display:flex;gap:4px}
+.tab{flex:1;padding:9px 8px;font-size:13px;font-weight:600;border:none;border-radius:var(--rs) var(--rs) 0 0;background:var(--bg2);color:var(--text2);cursor:pointer;-webkit-appearance:none;text-align:center}
+.tab.ap{background:var(--push-l);color:var(--push-d)}
+.tab.al{background:var(--pull-l);color:var(--pull-d)}
+.tab.au{background:var(--upper-l);color:var(--upper-d)}
+
+.day{display:none;padding:12px 14px 110px}
+.day.active{display:block}
+.day-sub{font-size:12px;color:var(--text3);margin-bottom:12px}
+.bonus-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;background:var(--upper-l);color:var(--upper-d);margin-left:6px;vertical-align:middle}
+.reset-wrap{text-align:right;margin-bottom:4px}
+.reset-btn{font-size:12px;color:var(--text3);background:none;border:none;cursor:pointer;-webkit-appearance:none;padding:4px 0}
+
+.card{background:var(--bg);border:.5px solid var(--border2);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
+.card-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+.card-left{flex:1;min-width:0}
+.card-name{font-size:15px;font-weight:600;color:var(--text)}
+.card-meta{font-size:12px;color:var(--text2);margin-top:2px}
+.card-right{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.bdg{font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.chev{font-size:10px;color:var(--text3);transition:transform .2s;display:inline-block}
+.chev.open{transform:rotate(180deg)}
+.card-det{display:none;border-top:.5px solid var(--border)}
+.card-det.open{display:block}
+.det-inner{padding:12px 14px 14px}
+.drow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:.5px solid var(--border);font-size:14px}
+.drow:last-of-type{border-bottom:none}
+.dlbl{color:var(--text2)}
+.dval{font-weight:600;color:var(--text)}
+
+.muscles-box{border-radius:var(--rs);padding:8px 11px;margin:8px 0;font-size:12px;line-height:1.5}
+.muscles-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.muscles-primary{font-weight:600}
+.muscles-secondary{color:var(--text3)}
+.tip{background:var(--bg2);border-radius:var(--rs);padding:9px 11px;margin:8px 0 6px;font-size:13px;color:var(--text2);line-height:1.5}
+.sci-tag{font-size:10px;color:var(--text3);background:var(--bg3);border-radius:4px;padding:2px 6px;display:inline-block;margin-bottom:10px}
+
+/* SETS TABLE */
+.sets-section{margin:10px 0}
+.sets-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px}
+.sets-table{width:100%;border-collapse:collapse}
+.sets-table th{font-size:11px;font-weight:600;color:var(--text3);text-align:left;padding:0 6px 6px 0;border-bottom:.5px solid var(--border)}
+.sets-table th:last-child{text-align:center}
+.sets-table td{padding:6px 6px 6px 0;border-bottom:.5px solid var(--border);vertical-align:middle;font-size:13px}
+.sets-table tr:last-child td{border-bottom:none}
+.set-num{font-weight:600;color:var(--text2);width:28px}
+.set-weight-input{width:70px;padding:7px 8px;border-radius:var(--rs);border:.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:14px;font-weight:600;-webkit-appearance:none;outline:none;text-align:center}
+.set-weight-input:focus{border-color:var(--border2)}
+.set-unit{font-size:12px;color:var(--text3);padding-left:4px}
+.set-check{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;background:var(--bg2);flex-shrink:0;margin:0 auto;transition:all .15s;font-size:14px}
+.set-check.done{color:white}
+.set-prev{font-size:11px;color:var(--text3);padding-left:2px}
+
+/* HISTORY */
+.hist-section{margin:10px 0 8px}
+.hist-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:6px}
+.hist-entry{background:var(--bg2);border-radius:var(--rs);padding:8px 10px;margin-bottom:6px;font-size:12px}
+.hist-entry-date{font-weight:600;color:var(--text);margin-bottom:4px}
+.hist-entry-sets{display:flex;flex-wrap:wrap;gap:4px}
+.hist-set-pill{background:var(--bg3);border-radius:4px;padding:2px 7px;font-size:11px;color:var(--text2);font-weight:600}
+.hist-empty{font-size:12px;color:var(--text3);text-align:center;padding:8px 0}
+
+.rest-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border-radius:var(--rs);border:none;font-size:14px;font-weight:600;color:white;cursor:pointer;-webkit-appearance:none;margin-top:6px}
+.rest-btn:active{opacity:.8}
+
+/* TIMER */
+.timer-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;align-items:flex-end;justify-content:center}
+.timer-ov.show{display:flex}
+.timer-sheet{background:var(--bg);border-radius:24px 24px 0 0;padding:24px 28px 44px;width:100%;max-width:500px;text-align:center}
+.t-handle{width:36px;height:4px;background:var(--bg3);border-radius:2px;margin:0 auto 18px}
+.t-exo{font-size:13px;color:var(--text2);margin-bottom:4px}
+.t-disp{font-size:72px;font-weight:700;letter-spacing:-4px;line-height:1;margin-bottom:4px}
+.t-sub{font-size:13px;color:var(--text3);margin-bottom:18px}
+.t-bar-wrap{height:6px;background:var(--bg3);border-radius:3px;margin-bottom:24px;overflow:hidden}
+.t-bar{height:6px;border-radius:3px;transition:width .8s linear}
+.t-actions{display:flex;gap:10px}
+.t-btn{flex:1;padding:14px;border-radius:var(--rs);font-size:15px;font-weight:600;cursor:pointer;border:none;-webkit-appearance:none}
+.t-skip{background:var(--bg2);color:var(--text2)}
+
+.prog-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:.5px solid var(--border);padding:11px 16px calc(11px + env(safe-area-inset-bottom,0));z-index:40}
+.prog-row{display:flex;align-items:center;gap:10px}
+.prog-lbl{font-size:12px;color:var(--text2);white-space:nowrap}
+.prog-track{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.prog-fill{height:4px;border-radius:2px;transition:width .3s;width:0%}
+.prog-pct{font-size:12px;font-weight:600;color:var(--text2);min-width:32px;text-align:right}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="app-name">Mon Programme</div>
+    <div class="streak" id="streakBadge">0 séances</div>
+  </div>
+  <div class="tabs">
+    <button class="tab ap" data-day="push" onclick="switchDay('push')">Push</button>
+    <button class="tab" data-day="pull" onclick="switchDay('pull')">Pull</button>
+  </div>
+</div>
+
+<div id="day-push" class="day active">
+  <div style="padding-top:10px"><div class="reset-wrap"><button class="reset-btn" onclick="resetDay('push')">Réinitialiser</button></div>
+  <div class="day-sub">Pectoraux · Épaules · Triceps · ~65 min</div></div>
+  <div class="tip" style="margin:0 0 12px">💡 <b>2 séances haut du corps</b> (Push + Pull) + ta séance jambes ailleurs = 3/semaine. Chaque muscle est travaillé <b>1×/semaine</b>, donc volume densifié et on va près de l'échec : <b>RIR</b> 1-2 sur les gros exos, 0-1 sur les isolations (une semaine complète pour récupérer). Tes 24 000 pas/jour couvrent le cardio.</div>
+  <div id="exos-push"></div>
+</div>
+<div id="day-pull" class="day">
+  <div style="padding-top:10px"><div class="reset-wrap"><button class="reset-btn" onclick="resetDay('pull')">Réinitialiser</button></div>
+  <div class="day-sub">Dos · Biceps · Arrière épaule · ~65 min</div></div>
+  <div class="tip" style="margin:0 0 12px">💡 Dos travaillé <b>1×/semaine</b> : point clé = l'<b>étirement complet en haut</b> (bras tendus, épaules qui montent). Face pull + biceps montés en volume car c'est leur seule dose de la semaine. Chest-supported si ton bas du dos fatigue avec la marche.</div>
+  <div id="exos-pull"></div>
+</div>
+
+<div class="timer-ov" id="timerOv" onclick="handleOvClick(event)">
+  <div class="timer-sheet">
+    <div class="t-handle"></div>
+    <div class="t-exo" id="tExo"></div>
+    <div class="t-disp" id="tDisp">3:00</div>
+    <div class="t-sub">restantes</div>
+    <div class="t-bar-wrap"><div class="t-bar" id="tBar" style="width:100%"></div></div>
+    <div class="t-actions">
+      <button class="t-btn t-skip" onclick="stopTimer()">Passer</button>
+      <button class="t-btn" id="tDoneBtn" onclick="stopTimer()">Terminer</button>
+    </div>
+  </div>
+</div>
+
+<div class="prog-bar">
+  <div class="prog-row">
+    <span class="prog-lbl" id="progLbl">0 / 0 séries</span>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    <span class="prog-pct" id="progPct">0%</span>
+  </div>
+</div>
+
+<script>
+var DAYS = {
+  push:{label:'Push',color:'push',exos:[
+    {name:'Développé couché barre',sets:4,reps:'5–7',rir:'2',rest:180,
+     primary:'Grand pectoral (chef sternal)',secondary:'Deltoïde antérieur · Triceps brachial',
+     tip:'Amplitude complète · pause contrôlée en bas (position étirée) · barre vers le bas des pecs · garde 2 reps en réserve',sci:'Pelland 2024 — dose-réponse : lourd = base force, rendements décroissants'},
+    {name:'Développé incliné haltères 30°',sets:3,reps:'8–10',rir:'1–2',rest:120,
+     primary:'Grand pectoral (chef claviculaire)',secondary:'Deltoïde antérieur · Triceps',
+     tip:'30° — pic pec haut · descente PROFONDE, cherche l\'étirement en bas · au-delà de 30° le deltoïde prend le relais',sci:'Rodríguez-Ridao 2020 · position allongée = stimulus fort'},
+    {name:'Écartés câble bas → haut (ou pec deck)',sets:3,reps:'12–15',rir:'0–1',rest:90,
+     primary:'Grand pectoral (isolation · position étirée)',secondary:'Deltoïde antérieur',
+     tip:'Tension constante · insiste sur l\'ouverture (muscle étiré) · contrôle la phase excentrique · proche de l\'échec',sci:'Long muscle length ≥ ROM complet (Maeo, Kassiano)'},
+    {name:'Développé militaire haltères assis',sets:3,reps:'8–10',rir:'2',rest:120,
+     primary:'Deltoïde antérieur + latéral',secondary:'Triceps brachial · Trapèze supérieur',
+     tip:'Assis · descente à 90° · gainage · pas de lordose excessive',sci:''},
+    {name:'Élévations latérales câble 1 bras',sets:4,reps:'12–20',rir:'0–1',rest:75,
+     primary:'Deltoïde latéral',secondary:'Deltoïde antérieur · Trapèze supérieur',
+     tip:'Câble passant DERRIÈRE le corps = plus d\'étirement en bas · coude légèrement fléchi · tempo lent · va proche de l\'échec (muscle qui récupère vite)',sci:'Delt latéral : isolations peu fatigantes, qualité > quantité'},
+    {name:'Extension triceps overhead câble',sets:3,reps:'10–12',rir:'1',rest:90,
+     primary:'Triceps brachial (LONG chef · position étirée)',secondary:'Chef latéral · médial',
+     tip:'Bras au-dessus de la tête = long chef étiré · descente complète derrière la nuque · coudes fixes',sci:'Maeo 2022 — overhead > neutre pour le long chef'},
+    {name:'Pushdown câble corde',sets:3,reps:'12–15',rir:'0–1',rest:60,
+     primary:'Triceps brachial (chef latéral + médial)',secondary:'Anconé',
+     tip:'Ouverture de la corde en fin · contraction 1s · coudes collés au corps · dernière série à l\'échec',sci:''}
+  ]},
+  pull:{label:'Pull',color:'pull',exos:[
+    {name:'Tractions lestées (pro/supination)',sets:4,reps:'5–8',rir:'2',rest:180,
+     primary:'Grand dorsal · Grand rond',secondary:'Biceps brachial · Rhomboïdes · Trapèze inférieur',
+     tip:'Amplitude complète · étirement complet en haut (bras tendus) · initie par les dorsaux · lest si <8 reps faciles',sci:'Edelburg 2017 — activation dorsaux #1'},
+    {name:'Rowing barre (ou chest-supported)',sets:4,reps:'6–8',rir:'2',rest:150,
+     primary:'Trapèze moyen/inférieur · Rhomboïdes · Érecteurs',secondary:'Grand dorsal · Biceps · Deltoïde postérieur',
+     tip:'Dos quasi-parallèle · coudes 45° · amplitude max · ne triche pas avec le buste · version chest-supported = moins de fatigue lombaire (utile avec ta marche)',sci:'Fenwick 2009 — trapèzes + érecteurs #1'},
+    {name:'Rowing 1 bras haltère',sets:4,reps:'10–12',rir:'1',rest:90,
+     primary:'Grand dorsal · Rhomboïdes · Trapèze moyen',secondary:'Biceps brachial · Érecteurs',
+     tip:'Amplitude totale · étirement en bas (laisse l\'épaule descendre) · coude haut en fin',sci:''},
+    {name:'Face pull / oiseau câble',sets:4,reps:'15–20',rir:'0–1',rest:75,
+     primary:'Deltoïde postérieur · Rotateurs externes',secondary:'Trapèze moyen · Rhomboïdes',
+     tip:'Hauteur des yeux · rotation externe en fin · coudes hauts · santé de la coiffe · volume monté à 4 séries car seule dose arrière-épaule de la semaine',sci:'Cools 2007 · 6-12 séries/sem pour l\'arrière d\'épaule'},
+    {name:'Curl incliné haltères ~50°',sets:4,reps:'10–12',rir:'0–1',rest:90,
+     primary:'Biceps brachial (LONG chef · étirement maximal)',secondary:'Brachial',
+     tip:'Banc incliné · épaule en extension = long chef étiré · étirement max en bas · ne balance pas',sci:'Oliveira 2009 · position allongée = long chef #1'},
+    {name:'Curl marteau câble corde',sets:3,reps:'12–15',rir:'0–1',rest:60,
+     primary:'Brachial · Brachioradial',secondary:'Biceps brachial',
+     tip:'Prise neutre · ROM complet · épaisseur du bras · dernière série à l\'échec',sci:''}
+  ]}
+};
+
+var COLORS={
+  push:{bg:'#534AB7',light:'#EEEDFE',dark:'#3C3489'},
+  pull:{bg:'#0F6E56',light:'#E1F5EE',dark:'#085041'}
+};
+
+// ─── STORAGE ─────────────────────────────────────────────────────────────────
+function ls(k,d){try{var v=localStorage.getItem(k);return v!==null?JSON.parse(v):d;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+// Session: which sets are checked today
+function getChecked(day,i){return ls('mx_chk_'+day+'_'+i,[]);}
+function saveChecked(day,i,a){lsSet('mx_chk_'+day+'_'+i,a);}
+
+// Per-set weights for current session (array indexed by set number)
+function getSessionWeights(day,i){return ls('mx_sw_'+day+'_'+i,[]);}
+function saveSessionWeights(day,i,a){lsSet('mx_sw_'+day+'_'+i,a);}
+
+// History: array of sessions [{date, sets:[{w, checked}]}]
+function getHistory(day,i){return ls('mx_hist_'+day+'_'+i,[]);}
+function saveHistory(day,i,a){lsSet('mx_hist_'+day+'_'+i,a);}
+
+function saveSessionToHistory(day,i){
+  var weights=getSessionWeights(day,i);
+  var checked=getChecked(day,i);
+  var exo=DAYS[day].exos[i];
+  var anyFilled=weights.some(function(w){return w&&w!=='';});
+  if(!anyFilled)return;
+  var hist=getHistory(day,i);
+  var today=new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'});
+  var sets=[];
+  for(var s=0;s<exo.sets;s++){
+    sets.push({w:weights[s]||'–',done:checked.indexOf(s)!==-1});
+  }
+  // replace if same date
+  if(hist.length&&hist[hist.length-1].date===today){hist[hist.length-1].sets=sets;}
+  else{hist.push({date:today,sets:sets});}
+  if(hist.length>8)hist=hist.slice(hist.length-8);
+  saveHistory(day,i,hist);
+}
+
+var currentDay='push';
+var timerInterval=null;
+var timerEndTime=null;
+var timerTotal=0;
+
+function fmtRest(s){
+  if(s===0)return 'Aucun';
+  if(s<60)return s+'s';
+  var m=Math.floor(s/60),sec=s%60;
+  return m+'min'+(sec?sec+'s':'');
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function renderDay(day){
+  var data=DAYS[day];
+  var c=COLORS[data.color||day];
+  var html='';
+  data.exos.forEach(function(exo,i){
+    var checked=getChecked(day,i);
+    var sessionW=getSessionWeights(day,i);
+    var hist=getHistory(day,i);
+    var lastSession=hist.length?hist[hist.length-1]:null;
+    var restLabel=fmtRest(exo.rest);
+    var doneCount=checked.length;
+
+    // sets table rows
+    var rows='';
+    for(var s=0;s<exo.sets;s++){
+      var isDone=checked.indexOf(s)!==-1;
+      var currentW=sessionW[s]||'';
+      var prevW=lastSession&&lastSession.sets[s]?lastSession.sets[s].w:'–';
+      rows+='<tr>'
+        +'<td class="set-num">S'+(s+1)+'</td>'
+        +'<td>'
+          +'<input class="set-weight-input" id="sw-'+day+'-'+i+'-'+s+'" type="text" inputmode="decimal" placeholder="kg" value="'+currentW+'" onchange="onWeightChange(\''+day+'\','+i+','+s+',this.value)">'
+          +'<span class="set-unit">kg</span>'
+        +'</td>'
+        +'<td style="font-size:11px;color:var(--text3);padding-left:4px">'+(prevW!=='–'?'↑'+prevW:'–')+'</td>'
+        +'<td style="text-align:center">'
+          +'<div class="set-check'+(isDone?' done':'')+'" id="sc-'+day+'-'+i+'-'+s+'" style="'+(isDone?'background:'+c.bg+';border-color:'+c.bg+';':'')+'" onclick="toggleSet(\''+day+'\','+i+','+s+')">'
+            +(isDone?'✓':'')
+          +'</div>'
+        +'</td>'
+      +'</tr>';
+    }
+
+    // history entries
+    var histHtml='';
+    if(hist.length){
+      hist.slice().reverse().slice(0,4).forEach(function(session){
+        var pills=session.sets.map(function(set,si){
+          return '<span class="hist-set-pill" style="'+(set.done?'background:'+c.light+';color:'+c.dark+';':'')+'">S'+(si+1)+' '+set.w+'</span>';
+        }).join('');
+        histHtml+='<div class="hist-entry"><div class="hist-entry-date">'+session.date+'</div><div class="hist-entry-sets">'+pills+'</div></div>';
+      });
+    } else {
+      histHtml='<div class="hist-empty">Aucune session enregistrée</div>';
+    }
+
+    var restBtn=exo.rest>0?'<button class="rest-btn" style="background:'+c.bg+'" onclick="startTimer('+exo.rest+',\''+exo.name.replace(/'/g,"\\'")+'\',' +'\''+day+'\')">Repos '+restLabel+' →</button>':'';
+
+    html+='<div class="card">'
+      +'<div class="card-hdr" onclick="toggleCard(this)">'
+        +'<div class="card-left">'
+          +'<div class="card-name">'+exo.name+'</div>'
+          +'<div class="card-meta">'+exo.sets+'×'+exo.reps+(exo.rir?' · RIR '+exo.rir:'')+' · '+restLabel+' · <span id="done-count-'+day+'-'+i+'">'+doneCount+'/'+exo.sets+' faites</span></div>'
+        +'</div>'
+        +'<div class="card-right">'
+          +'<span class="bdg" style="background:'+c.light+';color:'+c.dark+'">'+exo.sets+'×'+exo.reps+'</span>'
+          +'<span class="chev">▼</span>'
+        +'</div>'
+      +'</div>'
+      +'<div class="card-det" id="det-'+day+'-'+i+'">'
+        +'<div class="det-inner">'
+          +'<div class="drow"><span class="dlbl">Séries × Reps</span><span class="dval">'+exo.sets+' × '+exo.reps+'</span></div>'
+          +(exo.rir?'<div class="drow"><span class="dlbl">RIR (reps en réserve)</span><span class="dval">'+exo.rir+'</span></div>':'')
+          +'<div class="drow"><span class="dlbl">Repos</span><span class="dval">'+restLabel+'</span></div>'
+          +'<div class="muscles-box" style="background:'+c.light+'">'
+            +'<div class="muscles-title" style="color:'+c.dark+'">Muscles travaillés</div>'
+            +'<div class="muscles-primary" style="color:'+c.dark+'">'+exo.primary+'</div>'
+            +'<div class="muscles-secondary">'+exo.secondary+'</div>'
+          +'</div>'
+          +'<div class="tip">'+exo.tip+'</div>'
+          +(exo.sci?'<div class="sci-tag">'+exo.sci+'</div>':'')
+          // SETS TABLE
+          +'<div class="sets-section">'
+            +'<div class="sets-title">Séries — poids &amp; validation</div>'
+            +'<table class="sets-table">'
+              +'<thead><tr>'
+                +'<th style="width:32px"></th>'
+                +'<th>Poids</th>'
+                +'<th style="width:50px">Préc.</th>'
+                +'<th style="width:44px;text-align:center">OK</th>'
+              +'</tr></thead>'
+              +'<tbody>'+rows+'</tbody>'
+            +'</table>'
+          +'</div>'
+          // HISTORY
+          +'<div class="hist-section">'
+            +'<div class="hist-title">Historique (8 dernières séances)</div>'
+            +histHtml
+          +'</div>'
+          +restBtn
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  });
+  document.getElementById('exos-'+day).innerHTML=html;
+}
+
+function renderAll(){Object.keys(DAYS).forEach(renderDay);updateProgress();updateStreak();}
+
+// ─── INTERACTIONS ─────────────────────────────────────────────────────────────
+function switchDay(day){
+  currentDay=day;
+  document.querySelectorAll('.tab').forEach(function(t){t.className='tab';});
+  var map={push:'ap',pull:'al'};
+  document.querySelector('[data-day="'+day+'"]').className='tab '+map[day];
+  document.querySelectorAll('.day').forEach(function(d){d.classList.remove('active');});
+  document.getElementById('day-'+day).classList.add('active');
+  document.querySelectorAll('.card-det.open').forEach(function(d){
+    d.classList.remove('open');
+    d.previousElementSibling.querySelector('.chev').classList.remove('open');
+  });
+  window.scrollTo(0,0);updateProgress();
+}
+
+function toggleCard(hdr){
+  var det=hdr.nextElementSibling;
+  var chev=hdr.querySelector('.chev');
+  var isOpen=det.classList.contains('open');
+  document.querySelectorAll('.card-det.open').forEach(function(d){
+    d.classList.remove('open');
+    d.previousElementSibling.querySelector('.chev').classList.remove('open');
+  });
+  if(!isOpen){
+    det.classList.add('open');chev.classList.add('open');
+    setTimeout(function(){hdr.scrollIntoView({behavior:'smooth',block:'nearest'});},120);
+  }
+}
+
+function onWeightChange(day,idx,setNum,val){
+  var arr=getSessionWeights(day,idx);
+  while(arr.length<=setNum)arr.push('');
+  arr[setNum]=val;
+  saveSessionWeights(day,idx,arr);
+}
+
+function toggleSet(day,idx,s){
+  var arr=getChecked(day,idx);
+  var pos=arr.indexOf(s);
+  var c=COLORS[day];
+  var check=document.getElementById('sc-'+day+'-'+idx+'-'+s);
+  if(pos===-1){
+    arr.push(s);
+    check.classList.add('done');
+    check.style.background=c.bg;
+    check.style.borderColor=c.bg;
+    check.textContent='✓';
+    // auto-save weight to history when set is checked
+    saveSessionToHistory(day,idx);
+  } else {
+    arr.splice(pos,1);
+    check.classList.remove('done');
+    check.style.background='';
+    check.style.borderColor='';
+    check.textContent='';
+  }
+  saveChecked(day,idx,arr);
+  // update done count
+  document.getElementById('done-count-'+day+'-'+idx).textContent=arr.length+'/'+DAYS[day].exos[idx].sets+' faites';
+  updateProgress();
+  checkSessionComplete(day);
+}
+
+function resetDay(day){
+  if(!confirm('Réinitialiser la séance '+DAYS[day].label+' ? Les poids saisis seront perdus.'))return;
+  DAYS[day].exos.forEach(function(e,i){
+    saveChecked(day,i,[]);
+    saveSessionWeights(day,i,[]);
+  });
+  renderDay(day);
+  updateProgress();
+}
+
+function updateProgress(){
+  var data=DAYS[currentDay];
+  var total=data.exos.reduce(function(a,e){return a+e.sets;},0);
+  var done=data.exos.reduce(function(a,e,i){return a+getChecked(currentDay,i).length;},0);
+  var pct=total>0?Math.round((done/total)*100):0;
+  document.getElementById('progLbl').textContent=done+' / '+total+' séries';
+  document.getElementById('progPct').textContent=pct+'%';
+  var fill=document.getElementById('progFill');
+  fill.style.width=pct+'%';
+  fill.style.background=COLORS[currentDay].bg;
+}
+
+function checkSessionComplete(day){
+  var allDone=DAYS[day].exos.every(function(e,i){return getChecked(day,i).length>=e.sets;});
+  if(allDone){
+    var key='mx_done_'+day+'_'+new Date().toDateString();
+    if(!ls(key,false)){lsSet(key,true);var n=ls('mx_streak',0)+1;lsSet('mx_streak',n);updateStreak();}
+  }
+}
+
+function updateStreak(){
+  var n=ls('mx_streak',0);
+  document.getElementById('streakBadge').textContent=n+' séance'+(n>1?'s':'');
+}
+
+// ─── TIMER ───────────────────────────────────────────────────────────────────
+function startTimer(seconds,name,day){
+  if(timerInterval)clearInterval(timerInterval);
+  timerTotal=seconds;timerEndTime=Date.now()+seconds*1000;
+  lsSet('mx_timer_end',timerEndTime);lsSet('mx_timer_total',seconds);
+  lsSet('mx_timer_name',name);lsSet('mx_timer_day',day);
+  var c=COLORS[day];
+  document.getElementById('tExo').textContent=name;
+  document.getElementById('tBar').style.background=c.bg;
+  document.getElementById('tDoneBtn').style.background=c.bg;
+  document.getElementById('tDoneBtn').style.color='white';
+  document.getElementById('tDoneBtn').textContent='Terminer';
+  document.getElementById('tDisp').style.color=c.bg;
+  document.getElementById('timerOv').classList.add('show');
+  runTick();timerInterval=setInterval(runTick,500);
+}
+
+function runTick(){
+  var left=Math.max(0,Math.round((timerEndTime-Date.now())/1000));
+  var m=Math.floor(left/60),s=left%60;
+  document.getElementById('tDisp').textContent=m+':'+(s<10?'0':'')+s;
+  document.getElementById('tBar').style.width=(timerTotal>0?Math.round((left/timerTotal)*100):0)+'%';
+  if(left<=0){
+    clearInterval(timerInterval);timerInterval=null;
+    document.getElementById('tDisp').textContent='Go !';
+    document.getElementById('tDoneBtn').textContent="C'est parti !";
+    if(navigator.vibrate)navigator.vibrate([200,100,200]);
+    lsSet('mx_timer_end',null);
+  }
+}
+
+function stopTimer(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  lsSet('mx_timer_end',null);
+  document.getElementById('timerOv').classList.remove('show');
+}
+
+function handleOvClick(e){if(e.target===document.getElementById('timerOv'))stopTimer();}
+
+function checkRestoredTimer(){
+  var end=ls('mx_timer_end',null);if(!end)return;
+  var left=Math.round((end-Date.now())/1000);if(left<=0){lsSet('mx_timer_end',null);return;}
+  var name=ls('mx_timer_name','Repos');
+  var day=ls('mx_timer_day','push');
+  timerTotal=ls('mx_timer_total',120);timerEndTime=end;
+  var c=COLORS[day]||COLORS.push;
+  document.getElementById('tExo').textContent=name;
+  document.getElementById('tBar').style.background=c.bg;
+  document.getElementById('tDoneBtn').style.background=c.bg;
+  document.getElementById('tDoneBtn').style.color='white';
+  document.getElementById('tDisp').style.color=c.bg;
+  document.getElementById('timerOv').classList.add('show');
+  runTick();timerInterval=setInterval(runTick,500);
+}
+
+renderAll();
+checkRestoredTimer();
+document.addEventListener('visibilitychange',function(){if(!document.hidden)checkRestoredTimer();});
+</script>
+</body>
+</html>
